@@ -14,11 +14,13 @@ class ResultsViewController: UIViewController {
     @IBOutlet weak var settingsLabel: UILabel!
     
     var totalValue: Float?
+    var settings: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         totalLabel.text = String(totalValue!)
+        settingsLabel.text = settings!
     }
     
     @IBAction func recalculatePressed(_ sender: UIButton) {
