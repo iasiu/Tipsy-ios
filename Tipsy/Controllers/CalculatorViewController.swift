@@ -25,6 +25,12 @@ class CalculatorViewController: UIViewController {
     
     // pressed any button with tip percentage
     @IBAction func tipChanged(_ sender: UIButton) {
+        // hide keyboard when clicked out of it
+        billTextField.endEditing(true)
+        
+        // keyboard appears with only numbers when using text field
+        billTextField.keyboardType = UIKeyboardType.decimalPad
+        
         // select only last clicked button
         zeroButton.isSelected = false
         tenButton.isSelected = false
@@ -39,8 +45,12 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
+        // hide keyboard when clicked out of it
+        billTextField.endEditing(true)
+        
         // get number of people from stepper
         splitNumber = Int(sender.value)
+        
         // update stepper label
         splitNumberLabel.text = String(splitNumber)
     }
@@ -48,13 +58,18 @@ class CalculatorViewController: UIViewController {
     @IBAction func calculatePressed(_ sender: UIButton) {
         // get the bill value from text field
         let billText: String = billTextField.text ?? "0.0"
-        billValue = Double(billText) ?? 0.0
+        billValue = Double(billText.replacingOccurrences(of: ",", with: ".")) ?? 0.0
         
         //calculate final value per person
         let finalValueUnrounded = (Float(billValue) + Float(billValue) * tip) / Float(splitNumber) * 100
         finalValue = finalValueUnrounded.rounded() / 100
         
         performSegue(withIdentifier: "goToResult", sender: self)
+    }
+    
+    // hide keyboard when clicked out of it
+    @IBAction func tapGestureRecognized(_ sender: UITapGestureRecognizer) {
+        billTextField.endEditing(true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
